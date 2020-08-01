@@ -91,7 +91,6 @@ function CadastroCategoria() {
       </form>
 
       {/* {categorias.length === 0 && <div>
-        
         </div>} */}
 
       <ul>
