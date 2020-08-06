@@ -4,6 +4,9 @@ import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
 import useForm from '../../../hooks/useForm';
+import categoriasRepository from '../../../repositories/categorias';
+
+import { CategoryText } from './styles';
 
 function CadastroCategoria() {
   const valoresIniciais = {
@@ -15,6 +18,7 @@ function CadastroCategoria() {
   const { handleChange, values, clearForm } = useForm(valoresIniciais);
 
   const [categorias, setCategorias] = useState([]);
+
   useEffect(() => {
     const URL = window.location.href.includes('localhost')
       ? 'http://localhost:8080/categorias'
@@ -32,68 +36,81 @@ function CadastroCategoria() {
 
   return (
     <PageDefault>
+
       <h1>
         Cadastro de Categoria:
-        {values.nome}
+          {values.nome}
       </h1>
 
-      <form onSubmit={function handleSubmit(infosDoEvento) {
-        infosDoEvento.preventDefault();
-        setCategorias([
-          ...categorias,
-          values,
-        ]);
+      <div id="main">
+        <form onSubmit={function handleSubmit(infosDoEvento) {
+          infosDoEvento.preventDefault();
+          setCategorias([
+            ...categorias,
+            values,
+          ]);
 
-        clearForm();
-      }}
-      >
+          categoriasRepository.create({
+            titulo: values.nome,
+            cor: values.cor,
+          })
+            .then(() => {
+              alert('Categoria cadastrado com sucesso!');
+            });
 
-        <FormField
-          label="Nome da Categoria"
-          type="text"
-          name="nome"
-          value={values.nome}
-          onChange={handleChange}
-        />
+          clearForm();
+        }}
+        >
 
-        <FormField
-          label="Descrição"
-          type="textarea"
-          name="descricao"
-          value={values.descricao}
-          onChange={handleChange}
-        />
+          <FormField
+            label="Nome da Categoria"
+            type="text"
+            name="nome"
+            value={values.nome}
+            onChange={handleChange}
+          />
 
-        <FormField
-          label="Cor"
-          type="color"
-          name="cor"
-          value={values.cor}
-          onChange={handleChange}
-        />
+          <FormField
+            label="Descrição"
+            type="textarea"
+            name="descricao"
+            value={values.descricao}
+            onChange={handleChange}
+          />
 
-        <Button>
-          Cadastrar
-        </Button>
-      </form>
+          <FormField
+            label="Cor"
+            type="color"
+            name="cor"
+            value={values.cor}
+            onChange={handleChange}
+          />
 
-      {categorias.length === 0 && (
-        <div>
-          Loading...
-        </div>
-      )}
+          <Button>
+            Cadastrar
+          </Button>
+        </form>
 
-      <ul>
-        {categorias.map((categoria) => (
-          <li key={`${categoria.titulo}`}>
-            {categoria.titulo}
-          </li>
-        ))}
-      </ul>
+        {categorias.length === 0 && (
+          <div>
+            Loading...
+          </div>
+        )}
 
-      <Link to="/">
-        Ir para home
-      </Link>
+        <ul style={{ display: 'flex', flexDirection: 'column' }}>
+          {categorias.map((categoria) => (
+            <>
+              <CategoryText style={{ backgroundColor: categoria.cor }} key={`${categoria.titulo}`}>
+                {categoria.titulo}
+              </CategoryText>
+            </>
+          ))}
+        </ul>
+
+        <Link to="/">
+          Ir para home
+        </Link>
+      </div>
     </PageDefault>
   );
 }

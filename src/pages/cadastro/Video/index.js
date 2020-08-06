@@ -12,9 +12,9 @@ function CadastroVideo() {
   const [categorias, setCategorias] = useState([]);
   const categoryTitles = categorias.map(({ titulo }) => titulo);
   const { handleChange, values } = useForm({
-    titulo: 'Video padrao',
-    url: 'https://www.youtube.com/watch?v=cdheiNcZfQc&list=RDcdheiNcZfQc&start_radio=1',
-    categoria: 'Filmes',
+    titulo: '',
+    url: '',
+    categoria: '',
   });
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function CadastroVideo() {
       });
   }, []);
 
-  console.log(categoryTitles);
+  //console.log(categoryTitles);
 
   return (
     <PageDefault>
@@ -38,7 +38,7 @@ function CadastroVideo() {
           return categoria.titulo === values.categoria;
         });
 
-        console.log('categoriaEscolhida', categoriaEscolhida);
+        //console.log('categoriaEscolhida', categoriaEscolhida);
 
         videosRepository.create({
           titulo: values.titulo,
